@@ -1,8 +1,13 @@
-import numpy as np
+import os
+import json
 import csv as csv
+import numpy as np
 
-TRAIN_DATA_PATH = './Initial Data/train.csv'
-TEST_DATA_PATH = './Initial Data/test.csv'
+def get_paths():
+    paths = json.loads(open("Settings.json").read())
+    for key in paths:
+        paths[key] = os.path.expandvars(paths[key])
+    return paths
 
 def upload_data(path):
     '''Given the path to the csv file, return the array of the data
@@ -47,9 +52,8 @@ def imputing_median_by_the_group(data_array, n_to_mutate, n_based_on ):
                                                  (data_array[0::,n_based_on] == data_array[i,n_based_on]),n_to_mutate].astype(np.float))
     return data_array
 
-
-
-
+TRAIN_DATA_PATH = get_paths()["train_data_path"]
+TEST_DATA_PATH = get_paths()["test_data_path"]
     
 #Load in the training
 train_data = upload_data(TRAIN_DATA_PATH)
